@@ -9,11 +9,18 @@
 	<name>calcwebapp Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
-	</properties>
+<properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.release>17</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+</properties>
+
+#	<properties>
+#		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+#		<maven.compiler.source>11</maven.compiler.source>
+#		<maven.compiler.target>11</maven.compiler.target>
+#	</properties>
 
 	<dependencies>
 		<dependency>
