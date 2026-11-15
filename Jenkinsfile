@@ -1,51 +1,63 @@
 pipeline {
     agent any
+
+    tools {
+        maven 'Apache-Maven'
+    }
+
     stages {
+
         stage('Git Checkout') {
             steps {
-                git url: 'https://github.com/rchidana/calcwebapp.git'    
-		            echo "Code Checked-out Successfully!!";
-            }
-        }
-        
-        stage('Package') {
-            steps {
-                bat 'mvn package'    
-		            echo "Maven Package Goal Executed Successfully!";
-            }
-        }
-        
-        stage('JUNit Reports') {
-            steps {
-                    junit 'target/surefire-reports/*.xml'
-		                echo "Publishing JUnit reports"
-            }
-        }
-        
-        stage('Jacoco Reports') {
-            steps {
-                  jacoco()
-                  echo "Publishing Jacoco Code Coverage Reports";
+                git branch: 'master',
+                    url: 'https://github.com/NV-Narayana/calcwebapp.git'
+
+                echo 'Code Checked-out Successfully!!'
             }
         }
 
-	stage('SonarQube analysis') {
+        stage('Package') {
             steps {
-		// Change this as per your Jenkins Configuration
-                withSonarQubeEnv('SonarQube') {
-                    bat 'mvn package sonar:sonar'
+                sh 'mvn clean package'
+
+                echo 'Maven Package Goal Executed Successfully!'
+            }
+        }
+
+        stage('JUnit Reports') {
+            steps {
+                junit 'target/surefire-reports/*.xml'
+
+                echo 'Publishing JUnit Reports'
+            }
+        }
+
+        stage('Jacoco Reports') {
+            steps {
+                jacoco()
+
+                echo 'Publishing Jacoco Code Coverage Reports'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube-Server') {
+                    sh '''
+                        mvn org.sonarsource.scanner.maven:sonar-maven-plugin:5.5.0.6356:sonar
+                    '''
                 }
             }
         }
     }
+
     post {
-        
         success {
-            echo 'This will run only if successful'
+            echo 'Pipeline completed successfully!'
         }
+
         failure {
-            echo 'This will run only if failed'
+            echo 'Pipeline failed. Check Console Output.'
         }
-    
     }
 }
